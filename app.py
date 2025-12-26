@@ -31,6 +31,11 @@ def process_image(image_file):
     reader = load_model()
     file_bytes = np.asarray(bytearray(image_file.read()), dtype=np.uint8)
     img = cv2.imdecode(file_bytes, 1)
+    height, width = img.shape[:2]
+    if height > 1000:
+        scale = 1000 / height
+        dim = (int(width * scale), 1000)
+        img = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     result = reader.readtext(img, detail=0)
     
     data = {
